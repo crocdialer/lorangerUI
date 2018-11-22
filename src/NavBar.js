@@ -12,14 +12,14 @@ function NodeMenuItem(props){
 
 class NavBar extends Component {
   render() {
-    let apiHost = "http://" + window.location.hostname + ":8080"
+    let api_host = this.props.api_host;
 
     // items for the record dropdown menu
     let recordMenuItems = this.props.nodeList.map((n) =>{
       if(!n.active) {
         return;
       }
-      let clickHandler = () => fetch(apiHost + "/nodes/cmd?address=" + n.address +"&action=record&value=1&duration=20s")
+      let clickHandler = () => fetch(api_host + "/nodes/cmd?address=" + n.address +"&action=record&value=1&duration=20s")
       return(
         <NodeMenuItem
           key={n.address}
@@ -33,7 +33,7 @@ class NavBar extends Component {
       if(!n.active) {
         return;
       }
-      let clickHandler = () => fetch(apiHost + "/nodes/cmd?address=" + n.address +"&action=flashlight&value=1")
+      let clickHandler = () => fetch(api_host + "/nodes/cmd?address=" + n.address +"&action=flashlight&value=1")
       return(
         <NodeMenuItem
           key={n.address}

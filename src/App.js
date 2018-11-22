@@ -15,9 +15,13 @@ class App extends Component {
   render() {
     return (
       <div className="loranger_ui">
-        <NavBar nodeList={this.state.data}/>
+        <NavBar
+          nodeList={this.state.data}
+          api_host={this.api_host}
+        />
         <NodeComponent
           nodeList={this.state.data}
+          api_host={this.api_host}
         />
       </div>
     );
