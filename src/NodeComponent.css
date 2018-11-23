@@ -38,8 +38,10 @@
 @keyframes recordLoop {
   0%, 100% {
       border-color: #DDDDDD;
+      color: #DDDDDD;
   }
   50% {
       border-color: #FF6633;
+      color: #FF6633;
   }
 }

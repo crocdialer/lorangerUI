@@ -6,6 +6,10 @@
     color: #DDDDDD;
 }
 
+.dropdown-menu a.recording{
+    color: #FF6633;
+}
+
 .dropdown-item:hover{
     background-color: #DDDDDD;
 }

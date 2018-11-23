@@ -1,11 +1,12 @@
-import $ from 'jquery';
+// import $ from 'jquery';
+import { postData } from './App.js'
 import React, { Component } from 'react';
 import './NavBar.css';
 
 function NodeMenuItem(props){
     return(
       <li className="dropdown-item" onClick={props.onClick}>
-        <a href="#">{props.title}</a>
+        <a className={props.recording ? "recording" : ""} href="#">{props.title}</a>
       </li>
     );
 }
@@ -16,31 +17,32 @@ class NavBar extends Component {
 
     // items for the record dropdown menu
     let recordMenuItems = this.props.nodeList.map((n) =>{
-      if(!n.active) {
-        return;
+      if(n.active) {
+        let isRecording = n.mode & 1
+        let clickHandler = () => postData(api_host + "/nodes/cmd", {dst : n.address, cmd : "record", params: [!isRecording, 60]})
+        return(
+          <NodeMenuItem
+            key={n.address}
+            title={"Node " + n.address}
+            recording={isRecording}
+            onClick={clickHandler}
+          />
+        );
       }
-      let clickHandler = () => fetch(api_host + "/nodes/cmd?address=" + n.address +"&action=record&value=1&duration=20s")
-      return(
-        <NodeMenuItem
-          key={n.address}
-          title={"Node " + n.address}
-          onClick={clickHandler}
-        />
-      );
     });
     // items for the flashlight dropdown menu
     let flashMenuItems = this.props.nodeList.map((n) =>{
-      if(!n.active) {
-        return;
+      if(n.active) {
+        let isFlashing = n.mode & 2
+        let clickHandler = () => postData(api_host + "/nodes/cmd", {dst : n.address, cmd : "flashlight", params: [!isFlashing]})
+        return(
+          <NodeMenuItem
+            key={n.address}
+            title={"Node " + n.address}
+            onClick={clickHandler}
+          />
+        );
       }
-      let clickHandler = () => fetch(api_host + "/nodes/cmd?address=" + n.address +"&action=flashlight&value=1")
-      return(
-        <NodeMenuItem
-          key={n.address}
-          title={"Node " + n.address}
-          onClick={clickHandler}
-        />
-      );
     });
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
