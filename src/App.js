@@ -10,29 +10,38 @@ class App extends Component {
     this.api_host = "http://" + window.location.hostname + ":8080"
   }
   state = {
-    data:[]
+    nodeList:[],
+    pendingCommands:[]
   };
   render() {
     return (
       <div className="loranger_ui">
         <NavBar
-          nodeList={this.state.data}
+          nodeList={this.state.nodeList}
           api_host={this.api_host}
         />
         <NodeComponent
-          nodeList={this.state.data}
+          nodeList={this.state.nodeList}
+          pendingCommands={this.state.pendingCommands}
           api_host={this.api_host}
         />
       </div>
     );
   }
 
-  componentDidMount() {
-    this.interval = setInterval(() => {
+  update = () => {
       fetch(this.api_host + "/nodes")
         .then(response => response.json())
-        .then(data => this.setState({ data }));
-    }, 1000);
+        .then(nodeList => this.setState({ nodeList }));
+
+      fetch(this.api_host + "/nodes/cmd/pending")
+        .then(response => response.json())
+        .then(pendingCommands => this.setState({ pendingCommands }));
+  }
+
+  componentDidMount() {
+    this.update();
+    this.interval = setInterval(this.update, 1000);
   }
 
   componentWillUnmount() {
@@ -43,10 +52,6 @@ class App extends Component {
 export default App;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// postData(`http://example.com/answer`, {answer: 42})
-//   .then(data => console.log(JSON.stringify(data))) // JSON-string from `response.json()` call
-//   .catch(error => console.error(error));
 
 export function postData(url = ``, data = {}) {
   // Default options are marked with *

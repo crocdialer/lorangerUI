@@ -11,7 +11,7 @@ function Node(props){
         <div className={className}>
           <div className="row nodeHeader">
             <div className="col-sm-9 col-9">
-              <p>Node {props.value.address}</p>
+              <p>Node {props.value.address} -- {props.value.id}</p>
             </div>
             <div className="col-sm-1 col-1">
               <a href="#">edit</a>
@@ -26,7 +26,7 @@ function Node(props){
               <li>address: {props.value.address}</li>
               <li>rssi: {props.value.rssi} dB</li>
               <li>battery: {batteryStr}</li>
-              <li>freq: 434 MHz</li>
+              <li>frequency: {props.value.freq} MHz</li>
               <li>recording: {(props.value.mode & 0x1) ? "yes" : "no"}</li>
               <li>flashlight: {(props.value.mode & 0x2) ? "yes" : "no"}</li>
               <li>last timestamp: {props.value.stamp}</li>
@@ -34,6 +34,20 @@ function Node(props){
           </div>
         </div>
       </div>
+    );
+}
+
+function PendingCommand(props){
+  let paramStr = ""
+  for (const p of props.value.params){
+    paramStr += p + ", "
+  }
+  paramStr = paramStr.substr(0, paramStr.length - 2);
+
+    return(
+        <p>
+          ID: {props.value.cmd_id} -- command: {props.value.cmd}({paramStr}) -- dst: {props.value.dst}
+        </p>
     );
 }
 
@@ -68,12 +82,25 @@ export default class NodeComponent extends Component {
   }
 
   render() {
+    let commands = this.props.pendingCommands.map((cmd, i) => {
+      return(
+        <PendingCommand
+          key={"cmd_" + i}
+          value={cmd}
+        />
+      );
+    });
+
     return(
       <div className="container">
         <h1>
           Nodes
         </h1>
         {this.renderNodeGroup()}
+        <h2>
+          commands pending:
+        </h2>
+        {commands}
       </div>
     );
   }
