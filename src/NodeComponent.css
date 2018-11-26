@@ -1,3 +1,11 @@
+.nodeComponent .nodeSection{
+    border-style: solid;
+    border-color: #DDDDDD;
+    border-width: 2px 0px 0px 0px;
+    margin: 15px 0px 0px 0px;
+    padding: 10px 0px;
+}
+
 .node{
     border-style: dashed;
     color: #999999;

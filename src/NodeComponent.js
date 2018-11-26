@@ -14,7 +14,7 @@ function Node(props){
               <p>Node {props.value.address} -- {props.value.id}</p>
             </div>
             <div className="col-sm-1 col-1">
-              <a href="#">edit</a>
+              {/* <a href="#">edit</a> */}
             </div>
             <div className="col-sm-1 col-1">
               <a href={props.api_host + "/nodes/" + props.value.address +"/log?duration=10h&granularity=5m"}>log</a>
@@ -92,14 +92,19 @@ export default class NodeComponent extends Component {
     });
 
     return(
-      <div className="container">
-        <h1>
-          Nodes
-        </h1>
-        {this.renderNodeGroup()}
+      <div className="container nodeComponent">
         <h2>
-          commands pending:
+          nodes
         </h2>
+        {this.renderNodeGroup()}
+        <div className="row nodeSection">
+          <div className="col-sm-11 col-11">
+            <h2>commands:</h2>
+          </div>
+          <div className="col-sm-1 col-1">
+            <a href="#">log</a>
+          </div>
+        </div>
         {commands}
       </div>
     );
