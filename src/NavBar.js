@@ -1,5 +1,5 @@
 // import $ from 'jquery';
-import { postData } from './App.js'
+import {postData, nodeCommand} from './App.js'
 import React, { Component } from 'react';
 import './NavBar.css';
 
@@ -14,12 +14,13 @@ function NodeMenuItem(props){
 class NavBar extends Component {
   render() {
     let api_host = this.props.api_host;
+    let recordTime = 60
 
     // items for the record dropdown menu
     let recordMenuItems = this.props.nodeList.map((n) =>{
       if(n.active) {
         let isRecording = n.mode & 1
-        let clickHandler = () => postData(api_host + "/nodes/cmd", {dst : n.address, cmd : "record", params: [!isRecording, 60]})
+        let clickHandler = () => nodeCommand(n.address, "record", [!isRecording, recordTime])
         return(
           <NodeMenuItem
             key={n.address}
@@ -30,11 +31,39 @@ class NavBar extends Component {
         );
       }
     });
+
+    let cmdAllFactory = (command="", params=[]) => {
+      return () => {
+        for(const n of this.props.nodeList){
+          nodeCommand(n.address, command, params)
+        }
+      }
+    }
+
+    // record: start all
+    recordMenuItems.push(
+      <NodeMenuItem
+        key={this.props.nodeList.length}
+        title={"start all"}
+        enabled={false}
+        onClick={cmdAllFactory("record", [true, recordTime])}
+      />
+    )
+    // record: stop all
+    recordMenuItems.push(
+      <NodeMenuItem
+        key={this.props.nodeList.length + 1}
+        title={"stop all"}
+        enabled={false}
+        onClick={cmdAllFactory("record", [false])}
+      />
+    )
+
     // items for the flashlight dropdown menu
     let flashMenuItems = this.props.nodeList.map((n) =>{
       if(n.active) {
         let isFlashing = n.mode & 2
-        let clickHandler = () => postData(api_host + "/nodes/cmd", {dst : n.address, cmd : "flash", params: [!isFlashing]})
+        let clickHandler = () => nodeCommand(n.address, "flash", [!isFlashing])
         return(
           <NodeMenuItem
             key={n.address}
@@ -45,9 +74,29 @@ class NavBar extends Component {
         );
       }
     });
+
+    // flash: start all
+    flashMenuItems.push(
+      <NodeMenuItem
+        key={this.props.nodeList.length}
+        title={"start all"}
+        enabled={false}
+        onClick={cmdAllFactory("flash", [true])}
+      />
+    )
+    // flash: stop all
+    flashMenuItems.push(
+      <NodeMenuItem
+        key={this.props.nodeList.length + 1}
+        title={"stop all"}
+        enabled={false}
+        onClick={cmdAllFactory("flash", [false])}
+      />
+    )
+
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="/">LoRa Gateway</a>
+        <a className="navbar-brand" href="/">LoRanger</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>

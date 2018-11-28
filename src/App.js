@@ -3,11 +3,13 @@ import './App.css';
 import NavBar from './NavBar';
 import NodeComponent from './NodeComponent';
 
+var api_host = "http://" + window.location.hostname + ":8080"
+
 class App extends Component {
 
   constructor(props){
     super(props);
-    this.api_host = "http://" + window.location.hostname + ":8080"
+    this.api_host = api_host
 
     // register event-stream
     this.eventSource = new EventSource(this.api_host + "/events")
@@ -47,7 +49,6 @@ class App extends Component {
 
   handleCommandEvent = (e) => {
     let commandList = JSON.parse(e.data)
-    console.log(commandList)
     this.setState(Object.assign({}, this.state, {pendingCommands : commandList}))
   }
 
@@ -108,4 +109,8 @@ export function postData(url = ``, data = {}) {
     })
     .then(response => response.json()) // parses response to JSON
     .catch(error => console.error(error));
+}
+
+export function nodeCommand(dst = 0, command = "", params = []){
+    postData(api_host + "/nodes/cmd", {dst : dst, cmd : command, params: params})
 }

@@ -45,15 +45,18 @@ function Node(props){
 }
 
 function PendingCommand(props){
+  let command = props.value.command
+  let stamps = props.value.stamps
+
   let paramStr = ""
-  for (const p of props.value.params){
+  for (const p of props.value.command.params){
     paramStr += p + ", "
   }
   paramStr = paramStr.substr(0, paramStr.length - 2);
 
     return(
         <p>
-          ID: {props.value.cmd_id} -- command: {props.value.cmd}({paramStr}) -- dst: {props.value.dst}
+          ID: {command.cmd_id} -- command: {command.cmd}({paramStr}) -- dst: {command.dst} -- # transmit: {stamps.length}
         </p>
     );
 }
@@ -111,7 +114,7 @@ export default class NodeComponent extends Component {
             <h2>commands:</h2>
           </div>
           <div className="col-sm-1 col-1">
-            <a href={this.props.api_host + "/nodes/cmd/pending"}>log</a>
+            <a href={this.props.api_host + "/nodes/cmd/log"}>log</a>
           </div>
         </div>
         {commands}
