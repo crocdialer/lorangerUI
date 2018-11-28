@@ -3,19 +3,26 @@ import React, { Component } from 'react';
 import './NodeComponent.css';
 
 function Node(props){
-  let batteryStr = Math.round(props.value.bat * 100) + " %";
-  let className = "node" + (props.value.active ? " active" : "") + (props.value.mode ? " record" : "");
+  let isRecording = (props.value.mode & 0x1);
+  let isFlashing = (props.value.mode & 0x2);
+  let batteryStr = props.value.bat + " %";
+  let className = "node";
+
+  // active/recording style
+  if(props.value.active){
+    className += " active" + (isRecording ? " record" : "");
+  }
 
     return(
       <div className="col-md-6">
         <div className={className}>
           <div className="row nodeHeader">
-            <div className="col-sm-9 col-9">
+            <div className="col-sm-10 col-10">
               <p>Node {props.value.address} -- {props.value.id}</p>
             </div>
-            <div className="col-sm-1 col-1">
-              {/* <a href="#">edit</a> */}
-            </div>
+            {/* <div className="col-sm-1 col-1">
+              <a href="#">edit</a>
+            </div> */}
             <div className="col-sm-1 col-1">
               <a href={props.api_host + "/nodes/" + props.value.address +"/log?duration=10h&granularity=5m"}>log</a>
             </div>
@@ -27,8 +34,8 @@ function Node(props){
               <li>rssi: {props.value.rssi} dB</li>
               <li>battery: {batteryStr}</li>
               <li>frequency: {props.value.freq} MHz</li>
-              <li>recording: {(props.value.mode & 0x1) ? "yes" : "no"}</li>
-              <li>flashlight: {(props.value.mode & 0x2) ? "yes" : "no"}</li>
+              <li>recording: {isRecording ? "yes" : "no"}</li>
+              <li>flashlight: {isFlashing ? "yes" : "no"}</li>
               <li>last timestamp: {props.value.stamp}</li>
             </ul>
           </div>
@@ -93,16 +100,18 @@ export default class NodeComponent extends Component {
 
     return(
       <div className="container nodeComponent">
-        <h2>
-          nodes
-        </h2>
+        <div className="col-sm-10 col-10">
+          <h2>
+            nodes
+          </h2>
+        </div>
         {this.renderNodeGroup()}
         <div className="row nodeSection">
-          <div className="col-sm-11 col-11">
+          <div className="col-sm-10 col-10">
             <h2>commands:</h2>
           </div>
           <div className="col-sm-1 col-1">
-            <a href="#">log</a>
+            <a href={this.props.api_host + "/nodes/cmd/pending"}>log</a>
           </div>
         </div>
         {commands}

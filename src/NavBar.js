@@ -6,7 +6,7 @@ import './NavBar.css';
 function NodeMenuItem(props){
     return(
       <li className="dropdown-item" onClick={props.onClick}>
-        <a className={props.recording ? "recording" : ""} href="#">{props.title}</a>
+        <a className={props.enabled ? "enabled" : ""} href="#">{props.title}</a>
       </li>
     );
 }
@@ -24,7 +24,7 @@ class NavBar extends Component {
           <NodeMenuItem
             key={n.address}
             title={"Node " + n.address}
-            recording={isRecording}
+            enabled={isRecording}
             onClick={clickHandler}
           />
         );
@@ -34,11 +34,12 @@ class NavBar extends Component {
     let flashMenuItems = this.props.nodeList.map((n) =>{
       if(n.active) {
         let isFlashing = n.mode & 2
-        let clickHandler = () => postData(api_host + "/nodes/cmd", {dst : n.address, cmd : "flashlight", params: [!isFlashing]})
+        let clickHandler = () => postData(api_host + "/nodes/cmd", {dst : n.address, cmd : "flash", params: [!isFlashing]})
         return(
           <NodeMenuItem
             key={n.address}
             title={"Node " + n.address}
+            enabled={isFlashing}
             onClick={clickHandler}
           />
         );

@@ -1,3 +1,6 @@
+.nodeHeader .nodeTitle{
+    font-weight: bold;
+}
 .nodeComponent .nodeSection{
     border-style: solid;
     border-color: #DDDDDD;
@@ -5,7 +8,6 @@
     margin: 15px 0px 0px 0px;
     padding: 10px 0px;
 }
-
 .node{
     border-style: dashed;
     color: #999999;

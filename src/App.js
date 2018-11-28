@@ -8,11 +8,49 @@ class App extends Component {
   constructor(props){
     super(props);
     this.api_host = "http://" + window.location.hostname + ":8080"
+
+    // register event-stream
+    this.eventSource = new EventSource(this.api_host + "/events")
+
+    // fires only for unnamed events
+    // this.eventSource.onmessage = this.handleSSE
+    this.eventSource.addEventListener('node', this.handleNodeEvent, false);
+    this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
   }
   state = {
     nodeList:[],
     pendingCommands:[]
   };
+
+  handleNodeEvent = (e) => {
+    let obj = JSON.parse(e.data)
+    // console.log(e)
+
+    let nodes = this.state.nodeList
+    let foundNode = false
+
+    for (let i = 0; i < nodes.length; i++){
+      if(obj.address === nodes[i].address){
+        foundNode = true;
+        Object.assign(nodes[i], obj);
+        break;
+      }
+    }
+
+    if(!foundNode){
+      nodes.push(obj)
+      nodes.sort((lhs, rhs) => { return lhs.address > rhs.address; })
+    }
+
+    this.setState({ nodes })
+  }
+
+  handleCommandEvent = (e) => {
+    let commandList = JSON.parse(e.data)
+    console.log(commandList)
+    this.setState(Object.assign({}, this.state, {pendingCommands : commandList}))
+  }
+
   render() {
     return (
       <div className="loranger_ui">
@@ -41,11 +79,11 @@ class App extends Component {
 
   componentDidMount() {
     this.update();
-    this.interval = setInterval(this.update, 1000);
+    // this.interval = setInterval(this.update, 1000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
   }
 }
 
