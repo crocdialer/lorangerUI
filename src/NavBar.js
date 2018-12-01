@@ -35,7 +35,9 @@ class NavBar extends Component {
     let cmdAllFactory = (command="", params=[]) => {
       return () => {
         for(const n of this.props.nodeList){
-          nodeCommand(n.address, command, params)
+          // if(n.active){
+            nodeCommand(n.address, command, params)
+          // }
         }
       }
     }
