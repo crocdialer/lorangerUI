@@ -20,7 +20,7 @@ class NavBar extends Component {
     let recordMenuItems = this.props.nodeList.map((n) =>{
       if(n.active) {
         let isRecording = n.mode & 1
-        let clickHandler = () => nodeCommand(n.address, "record", [!isRecording, recordTime])
+        let clickHandler = () => nodeCommand(n.address, "record", [+ !isRecording, recordTime])
         return(
           <NodeMenuItem
             key={n.address}
@@ -35,9 +35,9 @@ class NavBar extends Component {
     let cmdAllFactory = (command="", params=[]) => {
       return () => {
         for(const n of this.props.nodeList){
-          // if(n.active){
+          if(n.active){
             nodeCommand(n.address, command, params)
-          // }
+          }
         }
       }
     }
@@ -48,7 +48,7 @@ class NavBar extends Component {
         key={this.props.nodeList.length}
         title={"start all"}
         enabled={false}
-        onClick={cmdAllFactory("record", [true, recordTime])}
+        onClick={()=>{cmdAllFactory("record", [1, recordTime])()}}
       />
     )
     // record: stop all
@@ -57,7 +57,7 @@ class NavBar extends Component {
         key={this.props.nodeList.length + 1}
         title={"stop all"}
         enabled={false}
-        onClick={cmdAllFactory("record", [false])}
+        onClick={()=>{cmdAllFactory("record", [0])()}}
       />
     )
 
@@ -65,7 +65,7 @@ class NavBar extends Component {
     let flashMenuItems = this.props.nodeList.map((n) =>{
       if(n.active) {
         let isFlashing = n.mode & 2
-        let clickHandler = () => nodeCommand(n.address, "flash", [!isFlashing])
+        let clickHandler = () => nodeCommand(n.address, "flash", [+ !isFlashing])
         return(
           <NodeMenuItem
             key={n.address}
@@ -83,7 +83,7 @@ class NavBar extends Component {
         key={this.props.nodeList.length}
         title={"start all"}
         enabled={false}
-        onClick={cmdAllFactory("flash", [true])}
+        onClick={()=>{cmdAllFactory("flash", [1])()}}
       />
     )
     // flash: stop all
@@ -92,7 +92,7 @@ class NavBar extends Component {
         key={this.props.nodeList.length + 1}
         title={"stop all"}
         enabled={false}
-        onClick={cmdAllFactory("flash", [false])}
+        onClick={()=>{cmdAllFactory("flash", [0])()}}
       />
     )
 
