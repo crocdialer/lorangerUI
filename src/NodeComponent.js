@@ -49,14 +49,14 @@ function PendingCommand(props){
   let stamps = props.value.stamps
 
   let paramStr = ""
-  for (const p of props.value.command.params){
+  for (const p of props.value.command.arg){
     paramStr += p + ", "
   }
   paramStr = paramStr.substr(0, paramStr.length - 2);
 
     return(
         <p>
-          ID: {command.cmd_id} -- command: {command.cmd}({paramStr}) -- dst: {command.dst} -- # transmit: {stamps.length}
+          ID: {command.id} -- command: {command.cmd}({paramStr}) -- dst: {command.dst} -- # transmit: {stamps.length}
         </p>
     );
 }

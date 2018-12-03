@@ -117,6 +117,6 @@ export function postData(url = ``, data = {}) {
     .catch(error => console.error(error));
 }
 
-export function nodeCommand(dst = 0, command = "", params = []){
-    postData(api_host + "/nodes/cmd", {dst : dst, cmd : command, params: params})
+export function nodeCommand(dst = 0, command = "", args = []){
+    postData(api_host + "/nodes/cmd", {dst : dst, cmd : command, arg: args})
 }
