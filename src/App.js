@@ -3,7 +3,8 @@ import './App.css';
 import NavBar from './NavBar';
 import NodeComponent from './NodeComponent';
 
-var api_host = "http://" + window.location.hostname + ":8080"
+var api_host = "http://" + window.location.hostname +
+  ( (window.location.port == 3000)  ? ":8080" : (":" + window.location.port))
 
 class App extends Component {
 
@@ -18,6 +19,9 @@ class App extends Component {
     // this.eventSource.onmessage = this.handleSSE
     this.eventSource.addEventListener('node', this.handleNodeEvent, false);
     this.eventSource.addEventListener('commands', this.handleCommandEvent, false);
+
+    // console.log("window.location.port: " + window.location.port)
+    // console.log("api host: " + api_host)
   }
   state = {
     nodeList:[],
@@ -71,11 +75,13 @@ class App extends Component {
   update = () => {
       fetch(this.api_host + "/nodes")
         .then(response => response.json())
-        .then(nodeList => this.setState({ nodeList }));
+        .then(nodeList => this.setState({ nodeList }))
+        .catch(error => console.error(error));
 
       fetch(this.api_host + "/nodes/cmd/pending")
         .then(response => response.json())
-        .then(pendingCommands => this.setState({ pendingCommands }));
+        .then(pendingCommands => this.setState({ pendingCommands }))
+        .catch(error => console.error(error));
   }
 
   componentDidMount() {
