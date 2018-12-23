@@ -4,7 +4,7 @@ import NavBar from './NavBar';
 import NodeComponent from './NodeComponent';
 
 var api_host = "http://" + window.location.hostname +
-  ( (window.location.port == 3000)  ? ":8080" : (":" + window.location.port))
+  ( (window.location.port === 3000)  ? ":8080" : (":" + window.location.port))
 
 class App extends Component {
 

@@ -3,10 +3,17 @@ import React, { Component } from 'react';
 import './NodeComponent.css';
 
 function Node(props){
-  let isRecording = (props.value.mode & 0x1);
-  let isFlashing = (props.value.mode & 0x2);
+  let isRecording = (props.value.mode & (1 << 0));
+  let isFlashing = (props.value.mode & (1 << 1));
+  let hasGpsFix = (props.value.mode & (1 << 3));
   let batteryStr = props.value.bat + " %";
   let className = "node";
+
+  // googlemaps location link
+  let loc_link =
+    <a href={"http://maps.google.com/maps?q=" + props.value.loc[0] + "," + props.value.loc[1]}>
+      {props.value.loc[0] + ", " + props.value.loc[1]}
+    </a>;
 
   // active/recording style
   if(props.value.active){
@@ -36,6 +43,7 @@ function Node(props){
               <li>frequency: {props.value.freq} MHz</li>
               <li>recording: {isRecording ? "yes" : "no"}</li>
               <li>flashlight: {isFlashing ? "yes" : "no"}</li>
+              <li>location: {hasGpsFix ? loc_link : "unknown"}</li>
               <li>last timestamp: {props.value.stamp}</li>
             </ul>
           </div>
