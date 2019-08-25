@@ -3,21 +3,35 @@ import React, { Component } from 'react';
 import './NodeComponent.css';
 
 function Node(props){
-  let isRecording = (props.value.mode & (1 << 0));
-  let isFlashing = (props.value.mode & (1 << 1));
-  let hasGpsFix = (props.value.mode & (1 << 3));
-  let batteryStr = props.value.bat + " %";
   let className = "node";
+  let node = props.value.data;
 
-  // googlemaps location link
-  let loc_link =
-    <a href={"http://maps.google.com/maps?q=" + props.value.loc[0] + "," + props.value.loc[1]}>
-      {props.value.loc[0] + ", " + props.value.loc[1]}
-    </a>;
+  let poopObj = Object.keys(node).map(function(curKey, index){
+    // node[curKey]
+      // console.log(curKey + ": " + node[curKey]);
+      return <li>{curKey}: {node[curKey]}</li>;
+      // if(typeof obj[curKey]==='object'){
+      //     var li=document.createElement('li');
+      //     var tn=document.createTextNode(curKey);
+      //     var ul=document.createElement('ul');
+      //     li.appendChild(tn);
+      //     li.appendChild(ul);
+      //     elt.appendChild(li);
+      //     iterateThrough(obj[curKey],ul);
+      // }
+      // else{
+      //     var li=document.createElement('li');
+      //     var aElt=document.createElement('a');
+      //     //you'd want to add other stuff (such as href or onclick) to the a element here
+      //     aElt.textContent=curKey;
+      //     li.appendChild(aElt);
+      //     elt.appendChild(li);
+      // }
+  });
 
   // active/recording style
   if(props.value.active){
-    className += " active" + (isRecording ? " record" : "");
+    className += " active";
   }
 
     return(
@@ -25,25 +39,15 @@ function Node(props){
         <div className={className}>
           <div className="row nodeHeader">
             <div className="col-sm-10 col-10">
-              <p>Node {props.value.address} -- {props.value.id}</p>
+              <p>Node {node.address} -- {node.type}</p>
             </div>
-            {/* <div className="col-sm-1 col-1">
-              <a href="#">edit</a>
-            </div> */}
             <div className="col-sm-1 col-1">
-              <a href={props.api_host + "/nodes/" + props.value.address +"/log?duration=10h&granularity=5m"}>log</a>
+              <a href={props.api_host + "/nodes/" + node.address +"/log?duration=10h&granularity=5m"}>log</a>
             </div>
           </div>
           <div className="row">
             <ul>
-              <li>id: {props.value.id}</li>
-              <li>address: {props.value.address}</li>
-              <li>rssi: {props.value.rssi} dB</li>
-              <li>battery: {batteryStr}</li>
-              <li>frequency: {props.value.freq} MHz</li>
-              <li>recording: {isRecording ? "yes" : "no"}</li>
-              <li>flashlight: {isFlashing ? "yes" : "no"}</li>
-              <li>location: {hasGpsFix ? loc_link : "unknown"}</li>
+              {poopObj}
               <li>last timestamp: {props.value.stamp}</li>
             </ul>
           </div>
