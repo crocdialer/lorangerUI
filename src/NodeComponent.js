@@ -7,26 +7,7 @@ function Node(props){
   let node = props.value.data;
 
   let poopObj = Object.keys(node).map(function(curKey, index){
-    // node[curKey]
-      // console.log(curKey + ": " + node[curKey]);
       return <li>{curKey}: {node[curKey]}</li>;
-      // if(typeof obj[curKey]==='object'){
-      //     var li=document.createElement('li');
-      //     var tn=document.createTextNode(curKey);
-      //     var ul=document.createElement('ul');
-      //     li.appendChild(tn);
-      //     li.appendChild(ul);
-      //     elt.appendChild(li);
-      //     iterateThrough(obj[curKey],ul);
-      // }
-      // else{
-      //     var li=document.createElement('li');
-      //     var aElt=document.createElement('a');
-      //     //you'd want to add other stuff (such as href or onclick) to the a element here
-      //     aElt.textContent=curKey;
-      //     li.appendChild(aElt);
-      //     elt.appendChild(li);
-      // }
   });
 
   // active/recording style
