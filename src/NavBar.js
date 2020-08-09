@@ -95,6 +95,8 @@ class NavBar extends Component {
         onClick={()=>{cmdAllFactory("flash", [0])()}}
       />
     )
+    
+    let grafanaUrl = "http://" + window.location.hostname + ":3000";
 
     return (
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -105,7 +107,7 @@ class NavBar extends Component {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Record
               </a>
@@ -120,9 +122,9 @@ class NavBar extends Component {
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 {flashMenuItems}
               </ul>
-            </li>
+            </li> */}
             <li className="nav-item">
-              <a className="nav-link disabled" href="/">Disabled</a>
+              <a className="nav-link" href={grafanaUrl}>Grafana</a>
             </li>
           </ul>
         </div>
